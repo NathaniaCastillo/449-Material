@@ -40,9 +40,36 @@ owns(Person, Pet1), owns(Person, Pet2),
 Pet1 \= Pet2.  
 
 % Prob 2 List Comprehension
-% Facts:
+% compress(List, Result) - removes consecutive duplicates from List
+%compress_helper is called with an accumulator to build the result in reverse order
+compress(List, Result):-
+    compress_helper(List, [], ResultRev),
+    reverse(ResultRev, Result).
 
+% compress_helper(+List, +Acc, -Result)
+% List  = the remaining input list to process
+% Acc   = accumulator holding compressed elements in REVERSE ORDER
+% Result = final compressed reversed list
 
+% Base case: no more items → the accumulator *is* the result.
+compress_helper([], Acc, Acc).  
+
+% Recursive case: process head and tail
+compress_helper([H|T], Acc, Result):-
+
+    % Check if head is the same as the head of the accumulator
+    % Acc = [H|_] means the last inserted element in Acc is H and matches
+    % if so, skip it
+    (Acc = [H|_] ->
+
+    % Skip the head since it's a duplicate
+
+        compress_helper(T, Acc, Result)
+    ;
+    % Otherwise, keep the head and add it to the accumulator
+
+        compress_helper(T, [H|Acc], Result)
+    ).          
 
 
 
