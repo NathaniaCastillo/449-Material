@@ -134,14 +134,13 @@ is_perfect(tree(_, Left, Right)):-
 % a) Facts:
 % requires(Course, Prereq) - Course has Prereq as a prerequisite
 
-
 requires(cpsc331, cpsc231).
 requires(cpsc355, cpsc331).
 requires(cpsc449, cpsc331).
 requires(cpsc449, cpsc355).
 
 % b) Rules: returns all direct and inderect prerequisites for a course
-% requires_all(Course, ListOfAllPrereqs) -> ListOfAllPrereqs is a list of all direct and indirect prerequisites for Course
+% requires_all(Course, AllPrereqs) -> AllPrereqs is a list of all direct and indirect prerequisites for Course
 
 requires_all(Course, AllPrereqs):-
     findall(Prereq, requires_recursive(Course, Prereq), PrereqList),
@@ -159,17 +158,21 @@ requires_recursive(Course, Prereq):-
       
 
 % c) computes max depth of prerequisite chain for a course
-% prereq_depth(Course, Depth)
+% prereq_depth(Course, Depth): Depth is the maximum depth of prerequisite chain for Course
 
 %course with zero prerequisites has depth 0
 prereq_depth(Course, 0):-    
     \+ requires(Course, _).
 
-% Recursive case: depth is 1 + depth of prerequisite
+% Recursive case: take the max depth among all direct prerequisites
 prereq_depth(Course, Depth):-
-    requires(Course, Prereq),
-    prereq_depth(Prereq, PrereqDepth),
-    Depth is PrereqDepth + 1.       
+    findall(PrereqDepth, 
+               (requires(Course, Prereq),
+                prereq_depth(Prereq, PrereqDepth)), 
+               Depths),
+    max_list(Depths, MaxDepth),
+    Depth is MaxDepth + 1.  
+  
 
 
 
