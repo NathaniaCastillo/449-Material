@@ -1,7 +1,7 @@
 /*
 Nathania Castillo
 UCID:30152619
-Dr. Nasri
+Dr. Nasri (T12:Kahbod Aeini)
 Dec 5, 2025 
 
 Assignment 4: using prolog to model relationships, lists, trees, and graphs using facts and rules
